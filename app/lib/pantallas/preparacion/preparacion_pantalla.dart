@@ -6,8 +6,6 @@ import '../../core/tema/tipografia.dart';
 import '../../core/widgets/encabezado.dart';
 import '../../core/widgets/boton_principal.dart';
 import '../../rutas.dart';
-import '../../servicios/servicio_ia.dart';
-import '../../modelos/resultado_analisis.dart';
 
 class PreparacionPantalla extends StatefulWidget {
   const PreparacionPantalla({super.key});

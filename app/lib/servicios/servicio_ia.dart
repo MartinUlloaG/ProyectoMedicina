@@ -1,13 +1,18 @@
-// IMPORTANTE, ACÁ USO LA IP LOCAL. LA 10.0.2.2. LLEGO AL PC LOCAL DONDE CORRO.
-// DEBO CAMBIARLA SI LO CORRO EN UN DISPOSITIVO REAL
-// LA PASO A LA IP LOCAL DEL PC EN LA RED WIFI
+// URL del servidor de análisis. Por defecto es 10.0.2.2, que es la dirección
+// con la que el emulador de Android llega al PC donde corre el servidor.
+// Para un teléfono físico o un servidor en la nube se cambia al compilar:
+//   flutter run --dart-define=API_URL=http://192.168.1.X:8000
+//   flutter build apk --release --dart-define=API_URL=https://mi-servidor.com
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../modelos/resultado_analisis.dart';
 
 class ServicioIA {
-  static const String _baseUrl = 'http://10.0.2.2:8000';
+  static const String _baseUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'http://10.0.2.2:8000',
+  );
 
   static Future<ResultadoAnalisis> analizarVideo({
     required File video,

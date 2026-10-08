@@ -10,3 +10,7 @@ app/.idea/
 app/android/.gradle/
 app/android/local.properties
 app/ios/Pods/
+
+# IDE
+.idea/
+*.iml

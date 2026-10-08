@@ -41,11 +41,14 @@ class _LoginPantallaState extends State<LoginPantalla> {
                 ),
                 const SizedBox(height: 16),
 
-                Text('Medicina', style: AppTipo.appName()
+                Text('SportVision AI', style: AppTipo.appName()
                     .copyWith(color: AppColores.textoPrincipal)),
                 const SizedBox(height: 4),
-                Text('Análisis de movimiento', style: AppTipo.caption()
-                    .copyWith(color: AppColores.textoSecundario)),
+                Text(
+                  'Asistente Inteligente para Evaluar y Mejorar Movimientos Deportivos',
+                  textAlign: TextAlign.center, // <-- Mágico: Centra el texto largo
+                  style: AppTipo.caption().copyWith(color: AppColores.textoSecundario),
+                ),
                 const SizedBox(height: 40),
 
                 // Card formulario

@@ -14,8 +14,8 @@ void main() {
     await tester.pumpWidget(const MiApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('Medicina'), findsOneWidget);
-    expect(find.text('Análisis de movimiento'), findsOneWidget);
+    expect(find.text('SportVision AI'), findsOneWidget);
+    expect(find.text('Asistente Inteligente para Evaluar y Mejorar Movimientos Deportivos'), findsOneWidget);
     expect(find.text('Iniciar sesión'), findsOneWidget);
   });
 }

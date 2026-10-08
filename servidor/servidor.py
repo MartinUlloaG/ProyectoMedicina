@@ -1,3 +1,4 @@
+from collections import Counter
 import math
 import tempfile
 import os
@@ -188,6 +189,24 @@ def calcular_puntaje(feedbacks_totales: list) -> int:
     return max(0, int(100 - ratio * 100))
 
 
+def resumir_feedback(feedbacks_totales: list, cuadros: int, minimo: float = 0.2) -> list:
+    # Un video recorre varias fases del ejercicio, asi que cada cuadro puede
+    # generar mensajes distintos (y opuestos) para la misma zona. Se deja solo
+    # el mensaje mas frecuente de cada zona y se descartan los que aparecen en
+    # menos del 20% de los cuadros, que suelen ser ruido de deteccion.
+    conteo = Counter(feedbacks_totales)
+    por_zona = {}
+    for mensaje, veces in conteo.most_common():
+        zona = mensaje.split(":")[0]
+        if zona not in por_zona:
+            por_zona[zona] = (mensaje, veces)
+    umbral = max(1, cuadros * minimo)
+    resumen = [m for m, v in por_zona.values() if v >= umbral]
+    if not resumen and conteo:
+        resumen = [conteo.most_common(1)[0][0]]
+    return resumen
+
+
 @app.post("/analizar")
 async def analizar_video(
     video: UploadFile = File(...),
@@ -203,6 +222,7 @@ async def analizar_video(
 
     todos_feedback = []
     ultimas_metricas = {}
+    cuadros_analizados = 0
 
     try:
         options = PoseLandmarkerOptions(
@@ -233,6 +253,7 @@ async def analizar_video(
                         fb, met  = analizar_frame(pose_lms, ejercicio)
                         todos_feedback.extend(fb)
                         ultimas_metricas = met
+                        cuadros_analizados += 1
 
                 frame_idx += 1
 
@@ -241,7 +262,7 @@ async def analizar_video(
     finally:
         os.unlink(tmp_path)
 
-    feedback_unico = list(dict.fromkeys(todos_feedback))
+    feedback_unico = resumir_feedback(todos_feedback, cuadros_analizados)
     puntaje = calcular_puntaje(todos_feedback)
 
     # Convertir numpy types a Python nativos para serialización
